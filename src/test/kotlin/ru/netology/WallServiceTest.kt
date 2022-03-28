@@ -28,7 +28,6 @@ class WallServiceTest {
 
     @Test
     fun updatePostIdExists() {
-        val expectedResult = true
         WallService.add(
             Post(
                 ownerId = 1,
@@ -54,12 +53,11 @@ class WallServiceTest {
                 text = "post with id=2 updated"
             )
         )
-        assertEquals(expectedResult, actualResult)
+        assertTrue(actualResult)
     }
 
     @Test
     fun updatePostIdNotExists() {
-        val expectedResult = false
         WallService.add(
             Post(
                 ownerId = 1,
@@ -85,6 +83,6 @@ class WallServiceTest {
                 text = "post with id=2 updated"
             )
         )
-        assertEquals(expectedResult, actualResult)
+        assertFalse(actualResult)
     }
 }

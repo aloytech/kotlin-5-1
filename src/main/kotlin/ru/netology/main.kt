@@ -64,8 +64,34 @@ data class Post(
     val likes: Likes = Likes(0, true, true, true),
     val reposts: Reposts = Reposts(0, false),
     val views: Views = Views(0),
-    val postType: String = POSTTYPEPOST
-)
+    val postType: String = POSTTYPEPOST,
+    val postSource: PostSource? = null,
+    val geo:Geo? = null,
+    val signerId: Int = 0,
+    val copyHistory: Array<Post> ? = null,
+    val canPin: Boolean = true,
+    val canDelete: Boolean = false,
+    val canEdit: Boolean = false,
+    val isPinned: Boolean = false,
+    val markAsAds: Boolean = false,
+    val isFavorite: Boolean = false,
+    val postponedId: Int = 0
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Post
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id
+    }
+}
 
 data class Comments(
     val count: Int,
@@ -91,11 +117,18 @@ data class Views(
     val count: Int
 )
 
+class PostSource()
+class Geo()
+
+
 object WallService {
     private var posts = emptyArray<Post>()
     fun add(post: Post): Post {
-        val maxId = findMaxId()
-        val countedPost = post.copy(id = maxId + 1)
+        val currentId: Int = when {
+            posts.isEmpty() -> 1
+            else -> posts.last().id + 1
+        }
+        val countedPost = post.copy(id = currentId)
         posts += countedPost
         return posts.last()
     }
@@ -112,15 +145,6 @@ object WallService {
         return exist
     }
 
-    fun findMaxId(): Int {
-        var maxId = 0
-        for (post in posts) {
-            if (post.id > maxId) {
-                maxId = post.id
-            }
-        }
-        return maxId
-    }
 
     fun outWall(): String {
         var outString: String = ""
