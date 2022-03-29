@@ -45,116 +45,28 @@ fun main() {
             text = "post with id=2 updated"
         )
     )
+    WallService.repost(
+        Post(
+            id = 3,
+            ownerId = 1,
+            fromId = 1,
+            date = System.currentTimeMillis().toInt(),
+            text = "my third post"
+        )
+    )
+    WallService.repost(
+        Post(
+            id = 10,
+            ownerId = 1,
+            fromId = 1,
+            date = System.currentTimeMillis().toInt(),
+            text = "my 10th post"
+        )
+    )
     println(WallService.outWall())
 
 }
 
-data class Post(
-    val id: Int = 0,
-    val ownerId: Int,
-    val fromId: Int,
-    val createdBy: Int = 0,
-    val date: Int,
-    val text: String,
-    val replyOwnerId: Int = 0,
-    val replyPostId: Int = 0,
-    val friendOnly: Boolean = false,
-    val comments: Comments = Comments(0, true, true, true, true),
-    val copyright: String = "@aloytech",
-    val likes: Likes = Likes(0, true, true, true),
-    val reposts: Reposts = Reposts(0, false),
-    val views: Views = Views(0),
-    val postType: String = POSTTYPEPOST,
-    val postSource: PostSource? = null,
-    val geo:Geo? = null,
-    val signerId: Int = 0,
-    val copyHistory: Array<Post> ? = null,
-    val canPin: Boolean = true,
-    val canDelete: Boolean = false,
-    val canEdit: Boolean = false,
-    val isPinned: Boolean = false,
-    val markAsAds: Boolean = false,
-    val isFavorite: Boolean = false,
-    val postponedId: Int = 0
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Post
-
-        if (id != other.id) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return id
-    }
-}
-
-data class Comments(
-    val count: Int,
-    val canPost: Boolean,
-    val groupsCanPost: Boolean,
-    val canClose: Boolean,
-    val canOpen: Boolean
-)
-
-data class Likes(
-    val count: Int,
-    val userLikes: Boolean,
-    val canLike: Boolean,
-    val canPublish: Boolean
-)
-
-data class Reposts(
-    val count: Int,
-    val userReposted: Boolean
-)
-
-data class Views(
-    val count: Int
-)
-
-class PostSource()
-class Geo()
 
 
-object WallService {
-    private var posts = emptyArray<Post>()
-    fun add(post: Post): Post {
-        val currentId: Int = when {
-            posts.isEmpty() -> 1
-            else -> posts.last().id + 1
-        }
-        val countedPost = post.copy(id = currentId)
-        posts += countedPost
-        return posts.last()
-    }
 
-    fun updatePost(post: Post): Boolean {
-        var exist = false
-        for ((index, existPost) in posts.withIndex()) {
-            if (existPost.id == post.id) {
-                val updatedPost = post.copy(date = existPost.date, ownerId = existPost.ownerId)
-                posts[index] = updatedPost
-                exist = true
-            }
-        }
-        return exist
-    }
-
-
-    fun outWall(): String {
-        var outString: String = ""
-        for (post in posts) {
-            outString = outString + "\n" + post.id + " " + post.text
-        }
-        return outString
-    }
-
-    fun clearWall() {
-        posts = emptyArray<Post>()
-    }
-}
