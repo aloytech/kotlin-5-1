@@ -17,16 +17,17 @@ data class Post(
     val views: Views = Views(0),
     val postType: String = POSTTYPEPOST,
     val postSource: PostSource? = null,
-    val geo:Geo? = null,
+    val geo: Geo? = null,
     val signerId: Int = 0,
-    val copyHistory: Array<Post> ? = null,
+    val copyHistory: Array<Post>? = null,
     val canPin: Boolean = true,
     val canDelete: Boolean = false,
     val canEdit: Boolean = false,
     val isPinned: Boolean = false,
     val markAsAds: Boolean = false,
     val isFavorite: Boolean = false,
-    val postponedId: Int = 0
+    val postponedId: Int = 0,
+    val attachments: Array<Attachments>? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

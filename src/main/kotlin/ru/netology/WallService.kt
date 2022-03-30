@@ -11,16 +11,17 @@ object WallService {
         posts += countedPost
         return posts.last()
     }
+
     fun repost(post: Post): Boolean {
         var history: Array<Post> = post.copyHistory ?: emptyArray<Post>()
         history += post
         val originalPostCountReposts = post.reposts.count
-        val changedPost = post.copy(reposts = Reposts(originalPostCountReposts+1,true))
-        if (updatePost(changedPost)){
+        val changedPost = post.copy(reposts = Reposts(originalPostCountReposts + 1, true))
+        if (updatePost(changedPost)) {
             val repost = post.copy(copyHistory = history)
             add(repost)
             return true
-        } else{
+        } else {
             return false
         }
     }
@@ -46,14 +47,25 @@ object WallService {
                 null -> "original"
                 else -> "repost"
             }
-            outString.append("\n" +
-                    post.id + " " + post.text + " reposted:" + post.reposts.count +
-                    " " + isRepost)
+            outString.append(
+                "\n" +
+                        post.id + " " + post.text + " reposted:" + post.reposts.count +
+                        " " + isRepost
+            )
         }
         return outString.toString()
     }
 
     fun clearWall() {
         posts = emptyArray<Post>()
+    }
+
+    fun getAttachments(post: Post): Array<Attachments>? {
+        for (existPost in posts) {
+            if (existPost.id == post.id) {
+                return existPost.attachments
+            }
+        }
+        return null
     }
 }

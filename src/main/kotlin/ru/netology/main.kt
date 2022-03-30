@@ -33,7 +33,8 @@ fun main() {
             ownerId = 1,
             fromId = 1,
             date = System.currentTimeMillis().toInt(),
-            text = "my fourth post"
+            text = "my fourth post",
+            attachments = arrayOf(Audio(id = 1), Video(id = 2), Photo(id = 3))
         )
     )
     WallService.updatePost(
@@ -64,7 +65,24 @@ fun main() {
         )
     )
     println(WallService.outWall())
-
+    println()
+    val attachments = WallService.getAttachments(
+        Post(
+            id = 4,
+            ownerId = 1,
+            fromId = 1,
+            date = System.currentTimeMillis().toInt(),
+            text = "my 10th post"
+        )
+    )
+    if (attachments != null) {
+        for (attachment in attachments) {
+            if (attachment is Photo) {
+                attachment.resize("800x600")
+            }
+            attachment.outputAccordingType()
+        }
+    }
 }
 
 
